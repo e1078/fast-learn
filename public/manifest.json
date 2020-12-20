@@ -2,6 +2,7 @@
   "name": "FastLearn",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",
+  "display": "standalone",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
