@@ -1,5 +1,6 @@
 {
   "name": "FastLearn",
+  "short_name": "FastLearn",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",
   "display": "standalone",

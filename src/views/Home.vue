@@ -42,9 +42,6 @@ export default {
     lists() {
       return this.$store.state.lists;
     }
-  },
-  created() {
-    this.$store.dispatch("bindLists");
   }
 };
 </script>

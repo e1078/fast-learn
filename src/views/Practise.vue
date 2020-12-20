@@ -7,7 +7,7 @@
     </v-app-bar>
     <v-container fill-height>
       <v-row justify="center">
-        <v-col cols="12" md="6" sm="8" xs="12">
+        <v-col cols="12" md="6" sm="8" xs="12" v-if="list != null">
           <v-card>
             <v-card-title
               >{{ list[wordIndex] }} vers {{ list[translateIndex] }}

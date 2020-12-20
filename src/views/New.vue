@@ -31,7 +31,7 @@
                     clearable
                   ></v-text-field>
                   <v-text-field
-                    label="Sous-Titre"
+                    label="Sous-titre"
                     v-model="subtitle"
                     clearable
                   ></v-text-field>
