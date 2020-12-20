@@ -1,3 +1,6 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8.00251 14.9297L0 1.07422H6.14651L8.00251 4.27503L9.84583 1.07422H16L8.00251 14.9297Z" fill="black"/>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M99.5 12L140.636 83.25H58.3638L99.5 12Z" fill="#35616A"/>
+<path d="M152.5 164L111.364 92.75L193.636 92.75L152.5 164Z" fill="#35616A"/>
+<path d="M47.5 164L6.36379 92.75L88.6362 92.75L47.5 164Z" fill="#35616A"/>
+<path d="M99.5 93L140.636 164.25L58.3638 164.25L99.5 93Z" fill="#35616A"/>
 </svg>
