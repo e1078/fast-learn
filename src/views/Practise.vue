@@ -178,7 +178,9 @@ export default {
         this.input.trim().toUpperCase() ==
         this.words[this.currentWord][this.translateIndex].trim().toUpperCase();
       if (!this.correct) {
-        this.actualErrors.push(this.currentWord);
+        this.actualErrors.push(
+          this.list.words.indexOf(this.words[this.currentWord])
+        );
       }
       this.step = 2;
       this.answersCount++;
