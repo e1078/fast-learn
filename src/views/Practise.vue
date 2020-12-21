@@ -25,10 +25,34 @@
                   <v-text-field
                     outlined
                     :label="words[currentWord][wordIndex]"
-                    clearable
-                    @click:clear="input = ''"
                     v-model="input"
                   ></v-text-field>
+                  <v-row justify="space-around" v-if="translateIndex == 1">
+                    <v-btn
+                      text
+                      @click="input += 'ß'"
+                      style="text-transform: none !important;"
+                      >ß</v-btn
+                    >
+                    <v-btn
+                      text
+                      @click="input += 'ä'"
+                      style="text-transform: none !important;"
+                      >ä</v-btn
+                    >
+                    <v-btn
+                      text
+                      @click="input += 'ö'"
+                      style="text-transform: none !important;"
+                      >ö</v-btn
+                    >
+                    <v-btn
+                      text
+                      @click="input += 'ü'"
+                      style="text-transform: none !important;"
+                      >ü</v-btn
+                    >
+                  </v-row>
                 </v-card-text>
               </v-window-item>
               <v-window-item :value="2">
