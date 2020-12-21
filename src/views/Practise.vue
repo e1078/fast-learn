@@ -19,7 +19,7 @@
                 <v-icon>mdi-restart</v-icon>
               </v-btn>
             </v-card-title>
-            <v-window v-model="step">
+            <v-window v-model="step" touchless>
               <v-window-item :value="1">
                 <v-card-text class="pb-0">
                   <v-text-field
@@ -27,32 +27,10 @@
                     :label="words[currentWord][wordIndex]"
                     v-model="input"
                   ></v-text-field>
-                  <v-row justify="space-around" v-if="translateIndex == 1">
-                    <v-btn
-                      text
-                      @click="input += 'ß'"
-                      style="text-transform: none !important;"
-                      >ß</v-btn
-                    >
-                    <v-btn
-                      text
-                      @click="input += 'ä'"
-                      style="text-transform: none !important;"
-                      >ä</v-btn
-                    >
-                    <v-btn
-                      text
-                      @click="input += 'ö'"
-                      style="text-transform: none !important;"
-                      >ö</v-btn
-                    >
-                    <v-btn
-                      text
-                      @click="input += 'ü'"
-                      style="text-transform: none !important;"
-                      >ü</v-btn
-                    >
-                  </v-row>
+                  <letters
+                    v-if="translateIndex == 1"
+                    @click="input += $event"
+                  ></letters>
                 </v-card-text>
               </v-window-item>
               <v-window-item :value="2">
@@ -60,18 +38,29 @@
                   <v-alert type="success" text v-if="correct"
                     >Bien joué !
                   </v-alert>
-                  <v-alert type="error" text v-else
-                    >La réponsé était
-                    <strong class="font-weight-black">{{
-                      words[currentWord][translateIndex]
-                    }}</strong></v-alert
-                  >
+                  <div v-else>
+                    <v-alert type="error" text
+                      >La réponse était
+                      <strong class="font-weight-black">{{
+                        words[currentWord][translateIndex]
+                      }}</strong></v-alert
+                    >
+                    <v-text-field
+                      outlined
+                      v-model="errorInput"
+                      :label="words[currentWord][wordIndex]"
+                    ></v-text-field>
+                    <letters
+                      v-if="translateIndex == 1"
+                      @click="errorInput += $event"
+                    ></letters>
+                  </div>
                 </v-card-text>
               </v-window-item>
               <v-window-item :value="3">
                 <v-card-text class="text-center">
                   <div class="headline">
-                    {{ (correctCount / words.length) * 20 }} / 20
+                    {{ ((correctCount / words.length) * 20).toFixed(1) }} / 20
                   </div>
                   <div>
                     Tu as
@@ -99,12 +88,14 @@
                   text
                   color="primary"
                   @click="nextWord"
+                  :disabled="disabled"
                   v-if="currentWord + 1 != words.length"
                   >Suivant</v-btn
                 >
                 <v-btn text color="primary" @click="step = 3" v-else
                   >Terminer</v-btn
                 >
+                <v-btn text color="red" @click="nextWord">Passer</v-btn>
               </div>
             </v-card-actions>
           </v-card>
@@ -124,13 +115,19 @@
 </template>
 
 <script>
+import Letters from "@/components/Letters";
+
 export default {
   name: "Practise",
+  components: {
+    Letters
+  },
   data: () => ({
     step: 1,
     currentWord: 0,
     answersCount: 0,
     input: "",
+    errorInput: "",
     wordIndex: 0,
     translateIndex: 1,
     correct: null,
@@ -159,13 +156,21 @@ export default {
         array[randomIndex] = temporaryValue;
       }
       return array;
+    },
+    disabled() {
+      return (
+        this.errorInput.trim().toUpperCase() !=
+          this.words[this.currentWord][this.translateIndex]
+            .trim()
+            .toUpperCase() && this.correct == false
+      );
     }
   },
   methods: {
     showCorrection() {
       this.correct =
-        this.input.trim() ==
-        this.words[this.currentWord][this.translateIndex].trim();
+        this.input.trim().toUpperCase() ==
+        this.words[this.currentWord][this.translateIndex].trim().toUpperCase();
       if (this.correct) {
         this.correctCount++;
       }
@@ -175,12 +180,14 @@ export default {
     nextWord() {
       this.step = 0;
       this.input = "";
+      this.errorInput = "";
       this.correct = null;
       this.currentWord++;
     },
     resetTest() {
       this.step = 0;
       this.input = "";
+      this.errorInput = "";
       this.currentWord = 0;
       this.correctCount = 0;
       this.answersCount = 0;

@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Practise from "../views/Practise.vue";
+import List from "../views/List.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,15 @@ const routes = [
     props: true,
     meta: {
       title: "Entraînement - FastLearn"
+    }
+  },
+  {
+    path: "/list/:practiseId",
+    name: "List",
+    component: List,
+    props: true,
+    meta: {
+      title: "Liste - FastLearn"
     }
   },
   {

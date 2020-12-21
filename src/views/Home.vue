@@ -23,9 +23,17 @@
               <v-btn
                 text
                 color="primary"
+                :to="{ name: 'List', params: { practiseId: list.id } }"
+              >
+                Voir les mots
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                color="primary"
                 :to="{ name: 'Practise', params: { practiseId: list.id } }"
               >
-                Commencer
+                Faire le test
               </v-btn>
             </v-card-actions>
           </v-card>
