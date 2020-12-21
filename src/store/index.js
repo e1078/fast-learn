@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import { vuexfireMutations, firestoreAction } from "vuexfire";
 import { db } from "@/db.js";
 Vue.use(Vuex);
+db.enablePersistence();
 
 export default new Vuex.Store({
   state: {

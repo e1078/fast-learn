@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
 
-firebase.firestore().enablePersistence();
+firebase.firestore();
 
 export const db = firebase
   .initializeApp({
