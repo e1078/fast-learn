@@ -60,18 +60,24 @@
               <v-window-item :value="3">
                 <v-card-text class="text-center">
                   <div class="headline">
-                    {{ ((correctCount / words.length) * 20).toFixed(1) }} / 20
+                    {{ words.length - actualErrors.length }} /
+                    {{ words.length }}
                   </div>
                   <div>
                     Tu as
                     <strong class="red--text font-weight-black body-2">{{
-                      words.length - correctCount
+                      actualErrors.length
                     }}</strong>
                     erreurs et
                     <strong class="green--text font-weight-black body-2">{{
-                      correctCount
+                      words.length - actualErrors.length
                     }}</strong>
                     bonnes réponses
+                  </div>
+                  <div class="pt-2" v-if="actualErrors.length != 0">
+                    <v-btn text color="red" @click="keepErrors"
+                      >Continuer</v-btn
+                    >
                   </div>
                 </v-card-text>
               </v-window-item>
@@ -95,11 +101,18 @@
                 <v-btn text color="primary" @click="step = 3" v-else
                   >Terminer</v-btn
                 >
-                <v-btn text color="red" @click="nextWord">Passer</v-btn>
+                <v-btn
+                  text
+                  color="red"
+                  @click="
+                    currentWord + 1 != words.length ? nextWord() : (step = 3)
+                  "
+                  >Passer</v-btn
+                >
               </div>
             </v-card-actions>
           </v-card>
-          <div class="mt-16 mx-4">
+          <div class="mt-16 mx-6">
             <v-progress-linear
               rounded
               :value="(answersCount / words.length) * 100"
@@ -131,7 +144,8 @@ export default {
     wordIndex: 0,
     translateIndex: 1,
     correct: null,
-    correctCount: 0
+    previousErrors: [],
+    actualErrors: []
   }),
   props: ["practiseId"],
   computed: {
@@ -139,7 +153,67 @@ export default {
       return this.$store.state.lists.find(list => list.id == this.practiseId);
     },
     words() {
-      var array = this.list.words;
+      if (this.previousErrors.length == 0) {
+        return this.shuffleArray(this.list.words);
+      } else {
+        return this.shuffleArray(
+          this.list.words.filter((e, index) =>
+            this.previousErrors.includes(index)
+          )
+        );
+      }
+    },
+    disabled() {
+      return (
+        this.errorInput.trim().toUpperCase() !=
+          this.words[this.currentWord][this.translateIndex]
+            .trim()
+            .toUpperCase() && this.correct == false
+      );
+    }
+  },
+  methods: {
+    showCorrection() {
+      this.correct =
+        this.input.trim().toUpperCase() ==
+        this.words[this.currentWord][this.translateIndex].trim().toUpperCase();
+      if (!this.correct) {
+        this.actualErrors.push(this.currentWord);
+      }
+      this.step = 2;
+      this.answersCount++;
+    },
+    nextWord() {
+      this.step = 0;
+      this.input = "";
+      this.errorInput = "";
+      this.currentWord++;
+    },
+    resetTest() {
+      this.step = 0;
+      this.input = "";
+      this.errorInput = "";
+      this.currentWord = 0;
+      this.previousErrors = [];
+      this.actualErrors = [];
+      this.answersCount = 0;
+    },
+    keepErrors() {
+      this.step = 0;
+      this.input = "";
+      this.errorInput = "";
+      this.currentWord = 0;
+      this.answersCount = 0;
+      this.previousErrors = this.actualErrors;
+      this.actualErrors = [];
+    },
+    swap() {
+      [this.wordIndex, this.translateIndex] = [
+        this.translateIndex,
+        this.wordIndex
+      ];
+    },
+    shuffleArray(array) {
       var currentIndex = array.length,
         temporaryValue,
         randomIndex;
@@ -156,47 +230,6 @@ export default {
         array[randomIndex] = temporaryValue;
       }
       return array;
-    },
-    disabled() {
-      return (
-        this.errorInput.trim().toUpperCase() !=
-          this.words[this.currentWord][this.translateIndex]
-            .trim()
-            .toUpperCase() && this.correct == false
-      );
-    }
-  },
-  methods: {
-    showCorrection() {
-      this.correct =
-        this.input.trim().toUpperCase() ==
-        this.words[this.currentWord][this.translateIndex].trim().toUpperCase();
-      if (this.correct) {
-        this.correctCount++;
-      }
-      this.step = 2;
-      this.answersCount++;
-    },
-    nextWord() {
-      this.step = 0;
-      this.input = "";
-      this.errorInput = "";
-      this.correct = null;
-      this.currentWord++;
-    },
-    resetTest() {
-      this.step = 0;
-      this.input = "";
-      this.errorInput = "";
-      this.currentWord = 0;
-      this.correctCount = 0;
-      this.answersCount = 0;
-    },
-    swap() {
-      [this.wordIndex, this.translateIndex] = [
-        this.translateIndex,
-        this.wordIndex
-      ];
     }
   }
 };
