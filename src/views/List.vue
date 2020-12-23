@@ -24,7 +24,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(word, index) in list.words" :key="index">
+                    <tr v-for="(word, index) in words" :key="index">
                       <td>{{ word[0] }}</td>
                       <td>{{ word[1] }}</td>
                     </tr>
@@ -46,6 +46,11 @@ export default {
   computed: {
     list() {
       return this.$store.state.lists.find(list => list.id == this.practiseId);
+    },
+    words() {
+      var words = this.list.words;
+      words.sort((a, b) => a[0].localeCompare(b[0]));
+      return words;
     }
   }
 };
