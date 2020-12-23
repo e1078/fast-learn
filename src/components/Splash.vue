@@ -12,19 +12,19 @@
         >
           <path
             fill="#35616A"
-            style="animation: anim1 2s cubic-bezier(0.8, 0, 0.2, 1.2) forwards"
+            style="animation: anim1 2s cubic-bezier(0.8, 0, 0.2, 1.1) forwards"
           />
           <path
             fill="#35616A"
-            style="animation: anim2 2s cubic-bezier(0.8, 0, 0.2, 1.2) forwards"
+            style="animation: anim2 2s cubic-bezier(0.8, 0, 0.2, 1.1) forwards"
           />
           <path
             fill="#35616A"
-            style="animation: anim3 2s cubic-bezier(0.8, 0, 0.2, 1.2) forwards"
+            style="animation: anim3 2s cubic-bezier(0.8, 0, 0.2, 1.1) forwards"
           />
           <path
             fill="#35616A"
-            style="animation: anim4 2s cubic-bezier(0.8, 0, 0.2, 1.2) forwards"
+            style="animation: anim4 2s cubic-bezier(0.8, 0, 0.2, 1.1) forwards"
           />
         </svg>
         <div class="display-2 text-center mt-4 text--secondary">FastLearn</div>
@@ -47,6 +47,7 @@ path {
 @keyframes anim1 {
   0% {
     d: path("M274.5 20L315.636 91.25H233.364L274.5 20Z");
+    transform: scale(0.1, 0.1) translate(0, -15%);
   }
   100% {
     d: path("M274.5 187L315.636 258.25H233.364L274.5 187Z");
@@ -57,6 +58,7 @@ path {
 @keyframes anim2 {
   0% {
     d: path("M477.5 322L436.364 250.75H518.636L477.5 322Z");
+    transform: scale(0.1, 0.1) translate(15%, 0);
   }
   100% {
     d: path("M327.5 339L286.364 267.75H368.636L327.5 339Z");
@@ -67,6 +69,7 @@ path {
 @keyframes anim3 {
   0% {
     d: path("M72.5 322L31.3638 250.75H113.636L72.5 322Z");
+    transform: scale(0.1, 0.1) translate(-15%, 0);
   }
   100% {
     d: path("M222.5 339L181.364 267.75H263.636L222.5 339Z");
@@ -77,6 +80,7 @@ path {
 @keyframes anim4 {
   0% {
     d: path("M274.5 401L315.636 472.25H233.364L274.5 401Z");
+    transform: scale(0.1, 0.1) translate(0, 15%);
   }
   100% {
     d: path("M274.5 268L315.636 339.25H233.364L274.5 268Z");
