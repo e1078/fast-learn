@@ -109,6 +109,9 @@
                   "
                   >Passer</v-btn
                 >
+                <v-btn text color="amber" @click="correctError"
+                  >J'ai raison</v-btn
+                >
               </div>
             </v-card-actions>
           </v-card>
@@ -128,39 +131,39 @@
 </template>
 
 <script>
-import Letters from "@/components/Letters";
+import Letters from '@/components/Letters'
 
 export default {
-  name: "Practise",
+  name: 'Practise',
   components: {
-    Letters
+    Letters,
   },
   data: () => ({
     step: 1,
     currentWord: 0,
     answersCount: 0,
-    input: "",
-    errorInput: "",
+    input: '',
+    errorInput: '',
     wordIndex: 0,
     translateIndex: 1,
     correct: null,
     previousErrors: [],
-    actualErrors: []
+    actualErrors: [],
   }),
-  props: ["practiseId"],
+  props: ['practiseId'],
   computed: {
     list() {
-      return this.$store.state.lists.find(list => list.id == this.practiseId);
+      return this.$store.state.lists.find(list => list.id == this.practiseId)
     },
     words() {
       if (this.previousErrors.length == 0) {
-        return this.shuffleArray(this.list.words);
+        return this.shuffleArray(this.list.words)
       } else {
         return this.shuffleArray(
           this.list.words.filter((e, index) =>
             this.previousErrors.includes(index)
           )
-        );
+        )
       }
     },
     disabled() {
@@ -169,70 +172,78 @@ export default {
           this.words[this.currentWord][this.translateIndex]
             .trim()
             .toUpperCase() && this.correct == false
-      );
-    }
+      )
+    },
   },
   methods: {
     showCorrection() {
       this.correct =
         this.input.trim().toUpperCase() ==
-        this.words[this.currentWord][this.translateIndex].trim().toUpperCase();
+        this.words[this.currentWord][this.translateIndex].trim().toUpperCase()
       if (!this.correct) {
         this.actualErrors.push(
           this.list.words.indexOf(this.words[this.currentWord])
-        );
+        )
       }
-      this.step = 2;
-      this.answersCount++;
+      this.step = 2
+      this.answersCount++
     },
     nextWord() {
-      this.step = 0;
-      this.input = "";
-      this.errorInput = "";
-      this.currentWord++;
+      this.step = 0
+      this.input = ''
+      this.errorInput = ''
+      this.currentWord++
     },
     resetTest() {
-      this.step = 0;
-      this.input = "";
-      this.errorInput = "";
-      this.currentWord = 0;
-      this.previousErrors = [];
-      this.actualErrors = [];
-      this.answersCount = 0;
+      this.step = 0
+      this.input = ''
+      this.errorInput = ''
+      this.currentWord = 0
+      this.previousErrors = []
+      this.actualErrors = []
+      this.answersCount = 0
     },
     keepErrors() {
-      this.step = 0;
-      this.input = "";
-      this.errorInput = "";
-      this.currentWord = 0;
-      this.answersCount = 0;
-      this.previousErrors = this.actualErrors;
-      this.actualErrors = [];
+      this.step = 0
+      this.input = ''
+      this.errorInput = ''
+      this.currentWord = 0
+      this.answersCount = 0
+      this.previousErrors = this.actualErrors
+      this.actualErrors = []
     },
     swap() {
-      [this.wordIndex, this.translateIndex] = [
+      ;[this.wordIndex, this.translateIndex] = [
         this.translateIndex,
-        this.wordIndex
-      ];
+        this.wordIndex,
+      ]
     },
     shuffleArray(array) {
       var currentIndex = array.length,
         temporaryValue,
-        randomIndex;
+        randomIndex
 
       // While there remain elements to shuffle...
       while (0 !== currentIndex) {
         // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
+        randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
 
         // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
+        temporaryValue = array[currentIndex]
+        array[currentIndex] = array[randomIndex]
+        array[randomIndex] = temporaryValue
       }
-      return array;
-    }
-  }
-};
+      return array
+    },
+    correctError() {
+      this.actualErrors.pop()
+      if (this.currentWord + 1 != this.words.length) {
+        this.nextWord()
+      } else {
+        this.step = 3
+      }
+    },
+  },
+}
 </script>
