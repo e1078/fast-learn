@@ -197,9 +197,9 @@ export default {
     },
     disabled() {
       return (
-        this.errorInput.trim().toUpperCase() !=
+        this.errorInput.replace(/\s/g, '').toUpperCase() !=
           this.words[this.currentWord][this.translateIndex]
-            .trim()
+            .replace(/\s/g, '')
             .toUpperCase() && this.correct == false
       )
     },
@@ -207,8 +207,10 @@ export default {
   methods: {
     showCorrection() {
       this.correct =
-        this.input.trim().toUpperCase() ==
-        this.words[this.currentWord][this.translateIndex].trim().toUpperCase()
+        this.input.replace(/\s/g, '').toUpperCase() ==
+        this.words[this.currentWord][this.translateIndex]
+          .replace(/\s/g, '')
+          .toUpperCase()
       if (!this.correct) {
         this.actualErrors.push(
           this.list.words.indexOf(this.words[this.currentWord])
