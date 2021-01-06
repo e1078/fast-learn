@@ -98,7 +98,12 @@
                   v-if="currentWord + 1 != words.length"
                   >Suivant</v-btn
                 >
-                <v-btn text color="primary" @click="step = 3" v-else
+                <v-btn
+                  text
+                  color="primary"
+                  @click="step = 3"
+                  :disabled="disabled"
+                  v-else
                   >Terminer</v-btn
                 >
                 <v-btn
@@ -151,6 +156,28 @@ export default {
     actualErrors: [],
   }),
   props: ['practiseId'],
+  mounted() {
+    this.event = addEventListener('keyup', event => {
+      if (event.key == 'Enter') {
+        if (this.step == 1) {
+          this.showCorrection()
+        } else if (this.step == 2 && !this.disabled) {
+          if (this.currentWord + 1 != this.words.length) {
+            this.nextWord()
+          } else {
+            this.step = 3
+          }
+        } else if (this.step == 3 && this.actualErrors.length != 0) {
+          this.keepErrors()
+        }
+      }
+    })
+  },
+  beforeDestroy() {
+    if (this.event) {
+      removeEventListener(this.event)
+    }
+  },
   computed: {
     list() {
       return this.$store.state.lists.find(list => list.id == this.practiseId)
