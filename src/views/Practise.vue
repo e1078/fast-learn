@@ -24,6 +24,7 @@
                 <v-card-text class="pb-0">
                   <v-text-field
                     outlined
+                    autofocus
                     :label="words[currentWord][wordIndex]"
                     v-model="input"
                   ></v-text-field>
@@ -48,6 +49,7 @@
                     <v-text-field
                       outlined
                       v-model="errorInput"
+                      autofocus
                       :label="words[currentWord][wordIndex]"
                     ></v-text-field>
                     <letters
