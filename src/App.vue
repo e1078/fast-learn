@@ -8,21 +8,21 @@
 </template>
 
 <script>
-import Splash from "@/components/Splash";
+import Splash from '@/components/Splash'
 
 export default {
-  name: "App",
+  name: 'App',
   data: () => ({
-    loading: true
+    loading: true,
   }),
   components: {
-    Splash
+    Splash,
   },
   created() {
-    this.$store.dispatch("bindLists");
+    this.$store.dispatch('bindLists')
     setTimeout(() => {
-      this.loading = false;
-    }, 2100);
-  }
-};
+      this.loading = false
+    }, 2100)
+  },
+}
 </script>

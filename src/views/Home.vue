@@ -1,7 +1,18 @@
 <template>
   <div>
     <v-app-bar color="white" flat>
+      <v-img
+        v-if="$vuetify.breakpoint.smAndUp"
+        :src="require('@/assets/logo.svg')"
+        max-width="50"
+      ></v-img>
+      <v-toolbar-title class="ml-2" v-if="$vuetify.breakpoint.smAndUp">
+        FastLearn
+      </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn text color="amber darken-3" :to="{ name: 'Test' }">
+        <v-icon class="mr-1">mdi-check</v-icon> Test Ultime
+      </v-btn>
       <v-btn text color="black" :to="{ name: 'New' }">
         <v-icon class="mr-1">mdi-plus</v-icon> Ajouter une liste
       </v-btn>
@@ -45,11 +56,11 @@
 
 <script>
 export default {
-  name: "Home",
+  name: 'Home',
   computed: {
     lists() {
-      return this.$store.state.lists;
-    }
-  }
-};
+      return this.$store.state.lists
+    },
+  },
+}
 </script>

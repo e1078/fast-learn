@@ -94,17 +94,17 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
-  name: "New",
+  name: 'New',
   data: () => ({
     step: 1,
-    title: "",
-    subtitle: "",
+    title: '',
+    subtitle: '',
     words: [{}],
-    wordText: "Français",
-    translateText: "Allemand"
+    wordText: 'Français',
+    translateText: 'Allemand',
   }),
   methods: {
     addList() {
@@ -114,14 +114,14 @@ export default {
         subtitle: this.subtitle,
         0: this.wordText,
         1: this.translateText,
-        words: this.words
-      };
-      this.$store.dispatch("addList", list);
-      this.back();
+        words: this.words,
+      }
+      this.$store.dispatch('addList', list)
+      this.back()
     },
     back() {
-      this.$router.go(-1);
-    }
-  }
-};
+      this.$router.go(-1)
+    },
+  },
+}
 </script>
