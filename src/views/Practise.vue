@@ -157,7 +157,7 @@ export default {
     previousErrors: [],
     actualErrors: [],
   }),
-  props: ['practiseId'],
+  props: ['practiseId', 'selectedWords'],
   mounted() {
     this.event = addEventListener('keyup', event => {
       if (event.key == 'Enter') {
@@ -186,7 +186,15 @@ export default {
     },
     words() {
       if (this.previousErrors.length == 0) {
-        return this.shuffleArray(this.list.words)
+        if (this.selectedWords == null || this.selectedWords.length == 0) {
+          return this.shuffleArray(this.list.words)
+        } else {
+          return this.shuffleArray(
+            this.list.words.filter((e, index) =>
+              this.selectedWords.includes(index)
+            )
+          )
+        }
       } else {
         return this.shuffleArray(
           this.list.words.filter((e, index) =>
