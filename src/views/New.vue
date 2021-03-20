@@ -68,6 +68,9 @@
                             v-model="word[1]"
                             clearable
                           ></v-text-field>
+                          <letters
+                            @click="word[1] = word[1] + $event"
+                          ></letters>
                         </v-card-text>
                       </v-card>
                     </v-col>
@@ -95,8 +98,10 @@
 
 <script>
 import { v4 as uuidv4 } from 'uuid'
+import Letters from '../components/Letters.vue'
 
 export default {
+  components: { Letters },
   name: 'New',
   data: () => ({
     step: 1,

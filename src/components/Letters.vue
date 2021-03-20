@@ -29,6 +29,6 @@
 
 <script>
 export default {
-  name: "Letters"
-};
+  name: 'Letters',
+}
 </script>
