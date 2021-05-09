@@ -265,7 +265,7 @@ export default {
       let errorMatch = false
 
       if (this.words[this.currentWord].type == this.wordTypes[1].name) {
-        /*errorMatch =
+        errorMatch =
           !this.inputs
             .map((_, index) => {
               const value = this.errorInputs[index]
@@ -281,8 +281,8 @@ export default {
               }
             })
             .every(value => value == false) ||
-          this.errorInputs.length !=
-            this.correct.filter(value => value == false).length */
+          this.errorInputs.filter(value => typeof value == 'string').length !=
+            this.correct.filter(value => value == false).length
       } else {
         errorMatch =
           this.errorInputs[0].replace(/\s/g, '').toUpperCase() !=
