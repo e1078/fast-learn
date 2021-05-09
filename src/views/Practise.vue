@@ -22,24 +22,56 @@
             <v-window v-model="step" touchless>
               <v-window-item :value="1">
                 <v-card-text class="pb-0">
-                  <v-text-field
-                    outlined
-                    autofocus
-                    :label="words[currentWord][wordIndex]"
-                    v-model="input"
-                  ></v-text-field>
-                  <letters
-                    v-if="translateIndex == 1"
-                    @click="input += $event"
-                  ></letters>
+                  <div
+                    v-if="
+                      words[currentWord].type == wordTypes[0].name ||
+                        words[currentWord].type == undefined ||
+                        (words[currentWord].type == wordTypes[1].name &&
+                          translateIndex == 0)
+                    "
+                  >
+                    <v-text-field
+                      outlined
+                      autofocus
+                      :label="words[currentWord][wordIndex]"
+                      v-model="inputs[0]"
+                    ></v-text-field>
+                    <letters
+                      v-if="translateIndex == 1"
+                      @click="inputs += $event"
+                    ></letters>
+                  </div>
+                  <div
+                    v-else-if="
+                      words[currentWord].type == wordTypes[1].name &&
+                        translateIndex == 1
+                    "
+                  >
+                    <v-subheader class="font-weight-bold"
+                      >Le verbe {{ words[currentWord][wordIndex] }} en
+                      {{ list[translateIndex] }}</v-subheader
+                    >
+
+                    <v-text-field
+                      v-for="(verbTitle, index) in verbTitles"
+                      :key="index"
+                      outlined
+                      autofocus
+                      :label="verbTitle"
+                      v-model="inputs[index]"
+                    ></v-text-field>
+                  </div>
                 </v-card-text>
               </v-window-item>
               <v-window-item :value="2">
                 <v-card-text>
-                  <v-alert type="success" text v-if="correct"
+                  <v-alert
+                    type="success"
+                    text
+                    v-if="correct.every(value => value == true)"
                     >Bien joué !
                   </v-alert>
-                  <div v-else>
+                  <div v-else-if="correct.length == 1">
                     <v-alert type="error" text
                       >La réponse était
                       <strong class="font-weight-black">{{
@@ -48,14 +80,40 @@
                     >
                     <v-text-field
                       outlined
-                      v-model="errorInput"
+                      v-model="errorInputs[0]"
                       autofocus
                       :label="words[currentWord][wordIndex]"
                     ></v-text-field>
                     <letters
                       v-if="translateIndex == 1"
-                      @click="errorInput += $event"
+                      @click="errorInputs[0] += $event"
                     ></letters>
+                  </div>
+                  <div v-else>
+                    <div v-for="(value, index) in correct" :key="index">
+                      <v-alert type="success" text v-if="value == true"
+                        >Bonne réponse
+                      </v-alert>
+
+                      <div v-else>
+                        <v-alert type="error" text
+                          >La réponse était
+                          <strong class="font-weight-black">{{
+                            words[currentWord][index + 1]
+                          }}</strong></v-alert
+                        >
+                        <v-text-field
+                          outlined
+                          v-model="errorInputs[index]"
+                          autofocus
+                          :label="verbTitles[index]"
+                        ></v-text-field>
+                        <letters
+                          v-if="translateIndex == 1"
+                          @click="errorInputs[index] += $event"
+                        ></letters>
+                      </div>
+                    </div>
                   </div>
                 </v-card-text>
               </v-window-item>
@@ -149,11 +207,11 @@ export default {
     step: 1,
     currentWord: 0,
     answersCount: 0,
-    input: '',
-    errorInput: '',
+    inputs: ['', '', '', ''],
+    errorInputs: [],
     wordIndex: 0,
     translateIndex: 1,
-    correct: null,
+    correct: [null],
     previousErrors: [],
     actualErrors: [],
   }),
@@ -204,22 +262,65 @@ export default {
       }
     },
     disabled() {
-      return (
-        this.errorInput.replace(/\s/g, '').toUpperCase() !=
+      let errorMatch = false
+
+      if (this.words[this.currentWord].type == this.wordTypes[1].name) {
+        /*errorMatch =
+          !this.inputs
+            .map((_, index) => {
+              const value = this.errorInputs[index]
+              if (value) {
+                return (
+                  value.replace(/\s/g, '').toUpperCase() !=
+                  this.words[this.currentWord][index + 1]
+                    .replace(/\s/g, '')
+                    .toUpperCase()
+                )
+              } else {
+                return false
+              }
+            })
+            .every(value => value == false) ||
+          this.errorInputs.length !=
+            this.correct.filter(value => value == false).length */
+      } else {
+        errorMatch =
+          this.errorInputs[0].replace(/\s/g, '').toUpperCase() !=
           this.words[this.currentWord][this.translateIndex]
             .replace(/\s/g, '')
-            .toUpperCase() && this.correct == false
-      )
+            .toUpperCase()
+      }
+
+      return errorMatch && this.correct.every(value => value == true) == false
+    },
+    verbTitles() {
+      return Object.values(this.$store.state.verbTitles)
+    },
+    wordTypes() {
+      return this.$store.state.wordTypes
     },
   },
   methods: {
     showCorrection() {
-      this.correct =
-        this.input.replace(/\s/g, '').toUpperCase() ==
-        this.words[this.currentWord][this.translateIndex]
-          .replace(/\s/g, '')
-          .toUpperCase()
-      if (!this.correct) {
+      if (this.words[this.currentWord].type == this.wordTypes[1].name) {
+        this.correct = this.inputs.map(
+          (input, index) =>
+            input.replace(/\s/g, '').toUpperCase() ==
+            this.words[this.currentWord][index + 1]
+              .replace(/\s/g, '')
+              .toUpperCase()
+        )
+      } else {
+        // we have only one input
+
+        this.correct[0] =
+          this.inputs[0].replace(/\s/g, '').toUpperCase() ==
+          this.words[this.currentWord][this.translateIndex]
+            .replace(/\s/g, '')
+            .toUpperCase()
+      }
+
+      if (!this.correct.every(value => value == true)) {
         this.actualErrors.push(
           this.list.words.indexOf(this.words[this.currentWord])
         )
@@ -229,14 +330,14 @@ export default {
     },
     nextWord() {
       this.step = 0
-      this.input = ''
-      this.errorInput = ''
+      this.inputs = ['', '', '', '']
+      this.errorInputs = []
       this.currentWord++
     },
     resetTest() {
       this.step = 0
-      this.input = ''
-      this.errorInput = ''
+      this.inputs = ['', '', '', '']
+      this.errorInputs = []
       this.currentWord = 0
       this.previousErrors = []
       this.actualErrors = []
@@ -244,8 +345,8 @@ export default {
     },
     keepErrors() {
       this.step = 0
-      this.input = ''
-      this.errorInput = ''
+      this.inputs = ['', '', '', '']
+      this.errorInputs = []
       this.currentWord = 0
       this.answersCount = 0
       this.previousErrors = this.actualErrors

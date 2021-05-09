@@ -15,7 +15,7 @@
               <v-btn
                 class="align-center"
                 text
-                @click="words.push({})"
+                @click="words.push({ type: 'word' })"
                 color="primary"
                 v-if="step == 2"
               >
@@ -58,19 +58,82 @@
                           </v-btn>
                         </v-card-title>
                         <v-card-text>
-                          <v-text-field
-                            :label="wordText"
-                            v-model="word[0]"
-                            clearable
-                          ></v-text-field>
-                          <v-text-field
-                            :label="translateText"
-                            v-model="word[1]"
-                            clearable
-                          ></v-text-field>
-                          <letters
-                            @click="word[1] = word[1] + $event"
-                          ></letters>
+                          <v-select
+                            v-model="word.type"
+                            :items="wordTypes"
+                            item-text="text"
+                            label="Type du mot"
+                            item-value="name"
+                          >
+                          </v-select>
+
+                          <div v-if="word.type == wordTypes[0].name">
+                            <v-text-field
+                              :label="wordText"
+                              v-model="word[0]"
+                              clearable
+                            ></v-text-field>
+                            <v-text-field
+                              :label="translateText"
+                              v-model="word[1]"
+                              clearable
+                            ></v-text-field>
+
+                            <letters
+                              @click="word[1] = word[1] + $event"
+                            ></letters>
+                          </div>
+                          <div v-else-if="word.type == wordTypes[1].name">
+                            <v-text-field
+                              :label="wordText"
+                              v-model="word[0]"
+                              clearable
+                            ></v-text-field>
+
+                            <v-subheader class="font-weight-bold">{{
+                              translateText
+                            }}</v-subheader>
+
+                            <v-text-field
+                              :label="verbTitles.infinitive"
+                              v-model="word[1]"
+                              clearable
+                            ></v-text-field>
+
+                            <letters
+                              @click="word[1] = word[1] + $event"
+                            ></letters>
+
+                            <v-text-field
+                              :label="verbTitles.present"
+                              v-model="word[2]"
+                              clearable
+                            ></v-text-field>
+
+                            <letters
+                              @click="word[2] = word[2] + $event"
+                            ></letters>
+
+                            <v-text-field
+                              :label="verbTitles.preterit"
+                              v-model="word[3]"
+                              clearable
+                            ></v-text-field>
+
+                            <letters
+                              @click="word[3] = word[3] + $event"
+                            ></letters>
+
+                            <v-text-field
+                              :label="verbTitles.perfect"
+                              v-model="word[4]"
+                              clearable
+                            ></v-text-field>
+
+                            <letters
+                              @click="word[4] = word[4] + $event"
+                            ></letters>
+                          </div>
                         </v-card-text>
                       </v-card>
                     </v-col>
@@ -107,10 +170,19 @@ export default {
     step: 1,
     title: '',
     subtitle: '',
-    words: [{}],
     wordText: 'Français',
     translateText: 'Allemand',
+
+    words: [{ type: 'word' }],
   }),
+  computed: {
+    verbTitles() {
+      return this.$store.state.verbTitles
+    },
+    wordTypes() {
+      return this.$store.state.wordTypes
+    },
+  },
   methods: {
     addList() {
       const list = {
@@ -121,6 +193,7 @@ export default {
         1: this.translateText,
         words: this.words,
       }
+
       this.$store.dispatch('addList', list)
       this.back()
     },
