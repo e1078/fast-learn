@@ -24,7 +24,7 @@
               <v-simple-table>
                 <template v-slot:default>
                   <thead>
-                    <tr>
+                    <tr v-if="type == false">
                       <th class="text-left">
                         {{ list[0] }}
                       </th>
@@ -33,11 +33,21 @@
                       </th>
                       <th>Test</th>
                     </tr>
+                    <tr v-else>
+                      <th class="text-left">
+                        {{ list[0] }}
+                      </th>
+                      <th v-for="(title, index) in verbTitles" :key="index">
+                        {{ title }}
+                      </th>
+                      <th>Test</th>
+                    </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(word, index) in words" :key="index">
-                      <td>{{ word[0] }}</td>
-                      <td>{{ word[1] }}</td>
+                      <td v-for="(value, i) in filterWord(word)" :key="i">
+                        {{ value }}
+                      </td>
                       <td>
                         <v-checkbox
                           v-model="checked"
@@ -69,8 +79,18 @@ export default {
     },
     words() {
       var words = this.list.words
-      //words.sort((a, b) => a[0].localeCompare(b[0]))
       return words
+    },
+    type() {
+      return this.list.words
+        .map(word => word.type)
+        .every(value => value == this.wordTypes[1].name)
+    },
+    verbTitles() {
+      return this.$store.state.verbTitles
+    },
+    wordTypes() {
+      return this.$store.state.wordTypes
     },
   },
   methods: {
@@ -79,6 +99,11 @@ export default {
         name: 'Practise',
         params: { practiseId: this.practiseId, selectedWords: this.checked },
       })
+    },
+    filterWord(word) {
+      return Object.entries(word)
+        .filter(array => !array.includes('type'))
+        .map(array => array[1])
     },
   },
 }
