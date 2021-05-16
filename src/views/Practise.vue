@@ -38,7 +38,7 @@
                     ></v-text-field>
                     <letters
                       v-if="translateIndex == 1"
-                      @click="inputs += $event"
+                      @click="inputs.splice(0, 1, (inputs[0] += $event))"
                     ></letters>
                   </div>
                   <div
@@ -52,14 +52,18 @@
                       {{ list[translateIndex] }}</v-subheader
                     >
 
-                    <v-text-field
-                      v-for="(verbTitle, index) in verbTitles"
-                      :key="index"
-                      outlined
-                      autofocus
-                      :label="verbTitle"
-                      v-model="inputs[index]"
-                    ></v-text-field>
+                    <div v-for="(verbTitle, index) in verbTitles" :key="index">
+                      <v-text-field
+                        outlined
+                        autofocus
+                        :label="verbTitle"
+                        v-model="inputs[index]"
+                      ></v-text-field>
+                      <letters
+                        v-if="translateIndex == 1"
+                        @click="inputs.splice(index, 1, inputs[index] + $event)"
+                      ></letters>
+                    </div>
                   </div>
                 </v-card-text>
               </v-window-item>
@@ -86,7 +90,9 @@
                     ></v-text-field>
                     <letters
                       v-if="translateIndex == 1"
-                      @click="errorInputs[0] += $event"
+                      @click="
+                        errorInputs.splice(0, 1, (errorInputs[0] += $event))
+                      "
                     ></letters>
                   </div>
                   <div v-else>
@@ -110,7 +116,13 @@
                         ></v-text-field>
                         <letters
                           v-if="translateIndex == 1"
-                          @click="errorInputs[index] += $event"
+                          @click="
+                            errorInputs.splice(
+                              index,
+                              1,
+                              errorInputs[index] + $event
+                            )
+                          "
                         ></letters>
                       </div>
                     </div>
